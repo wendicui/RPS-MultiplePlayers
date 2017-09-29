@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>RPS</title>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+	<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Indie+Flower" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" href="Assets/CSS/style.css">
+	<script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js"></script>
+</head>
+<body>
+	<div class = "text-center container" id = "begin"> begin</div>
+<!-- button -->
+	<div class = "container text-center choice">
+		<img class = "play" src = "Assets/Img/1.jpg" qual = "1">
+		<img class = "play" src = "Assets/Img/2.jpg" qual = "2">
+		<img class = "play" src = "Assets/Img/3.jpg" qual = "3">
+	</div>
+<!-- selection -->
+	<div class = "result container col-sm-6 col-md-6 col-lg-6 text-center">
+		<h6> YOU PICKED</h6> 
+		<img id = "yourChoice"></br>
+		<h8 class = "bottom"> WINNING: <span id = "win"></span></h8>
+	</div>
+
+	<div class = "result container col-sm-6  col-md-6 col-lg-6 text-center">
+		<h6> OPPONENT PICKED</h6> 
+		<img id = "OtherChoice"></br>
+		<h8 class = "bottom"> LOSSING: <span id = "lose"></span></h8>
+	</div>
+<!-- chat -->
+
+	<div class = "chat container  text-center">
+		<div class = "formgroup">
+			<textarea class = "input" id = "chathistory"></textarea>
+		</div>
+		<div class = "formgroup">
+			<input class = "input"  type = "text" id = "input" >
+		</div>
+		<button type = "submit" class = "button">Enter</button>
+	</div>
+
+	
+
+<script type="text/javascript" src = "Assets/Javascript/rps.js">
+
+</script>
+
+</body>
+</html>

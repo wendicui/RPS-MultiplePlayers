@@ -1,0 +1,55 @@
+body{
+font-family: 'Gloria Hallelujah', cursive;
+
+}
+
+.result{
+	position: relative;
+	height:50vmin;
+}
+
+.input{
+	background-color: black;
+	width:80%;
+	color:white;
+	padding:15px;
+	border-radius: 10px;
+	border:none;
+	margin-bottom: 5px;
+	font-family: 'Indie Flower', cursive;
+	overflow: hidden;
+}
+
+.button{
+	color: white;
+	background-color: black;
+	float:left;
+	margin-left: 10%;
+	border:none;
+	border-radius: 10px;
+}
+
+.play {
+	width:10%;	
+}
+
+.bottom{
+	position:absolute;
+	bottom:5%;
+	left:0;
+	width:100%;
+}
+
+.choice{
+	
+	width:100%;
+}
+
+#chathistory{
+	height:15vmin;
+}
+
+#yourChoice, #OtherChoice{
+	width:40vmin;
+	display:inline-block;
+}

@@ -12,11 +12,13 @@
 	var playerID = 0;
 	var data = firebase.database()
 	var qual = 0;
+	//check whether the game is on, then means whether peole leave or come
 	var begin = false;
 	var player = 0;
 	var otherChoose = 0
 	//prevent user click multiple times in the same round
 	var round = false
+	//win or lose
 	var status
 	var win = 0;
 	var lose = 0;
@@ -24,17 +26,23 @@
 
 	data.ref("player").once("value", function(snapshot){
 
-		if(snapshot.hasChild("player2")){
+		if(snapshot.hasChild("player2") && snapshot.hasChild("player1")){
 
 			alert("full")
-			begin = true;
+			
 
-		}else if(snapshot.hasChild("player1")){
+		}else if(snapshot.hasChild("player1") && !snapshot.hasChild("player2")){
 			data.ref("player").set({
 				player2: 2,
 				player1: 1
 			})
 			playerID = 2;
+		}else if (snapshot.hasChild("player2") && !snapshot.hasChild("player1")){
+			data.ref("player").set({
+				player1: 1,
+				player2: 2
+			})
+			playerID = 1;
 		}else{
 			data.ref("player").set({
 				player1: 1
@@ -52,7 +60,7 @@
 
 	// 			player = snapshot.val().player
 	// 		})
-//function begin
+//function start, start next round
 	function start(){
 		setTimeout(function(){
 			$("#yourChoice").attr("src", "");
@@ -60,28 +68,82 @@
 			data.ref("choice").set({
 			
 			})
+			setTimeout(function(){round = false;},1000)
+			
 		},3000)
 
 	}
 
+//function newGame, start another game
+function newGame(){
+	win = 0;
+	lose = 0;
 
+	$("#win").html(win)
+	$("#lose").html(lose)
 
-	$("#begin"). on("click", function(){
-		begin = true;
-		round = false;
-		start()
+	data.ref("dialogue").set({
+			
+	})
+
+	$("#chathistory").html("")
+}
+
+//leave function
+
+	$("#leave"). on("click", function(){
+		if(playerID === 1){
+			data.ref("player").set({
+				player2:2
+				})
+		}else if(playerID === 2){
+			data.ref("player").set({
+				player1: 1
+				})
+		}
+
+		
+		round = true;
 
 	})
+//alert people
+	data.ref("player/player1").on("value", function(snapshot){
+		if(playerID === 2 && begin === true){
+			alert("Opponent left");
+			begin = false
+			newGame()
+
+		}else if(playerID === 2 && begin != true){
+			alert("New Opponent join, Begin Battle!")
+			newGame()
+		}
+	})
+
+		data.ref("player/player2").on("value", function(snapshot){
+		if(playerID === 1 && begin === true){
+			alert("Opponent left");
+			begin = false
+			newGame()
+		}
+
+		else if(playerID === 1 && begin != true){
+			alert("New Opponent join, Begin Battle!")
+			newGame()
+		}
+	})
+
 //move what you choose to choice region.
 
 	$(".play").on("click", function(){
 
-		if(round === false){
+		if(round === false && playerID != 0){
+			begin = true;
 			$("#yourChoice").attr("src", $(this).attr("src"))
 			qual = $(this).attr("qual")
 			round = true;
+			console.log(" round begin")
 			upload();
-			console.log("beforeshow")
+			
 			
 		}
 	})
@@ -89,11 +151,14 @@
 //upload choice 
 
 	function upload(){
+		
 		if(playerID === 1 ){
+			console.log("Uploading")
 			data.ref("choice/player1").set({
 			choose: qual
 			})
 		}else{
+			console.log("Uploading")
 			data.ref("choice/player2").set({
 			choose: qual
 			})
@@ -121,9 +186,7 @@
 
 // add other choose to page
 	function add(){
-
 		$("#OtherChoice").attr("src", "Assets/Img/" + otherChoose + ".jpg")
-		console.log("add")
 	}
 
 //compare win or lose
@@ -134,29 +197,29 @@
 			
 		if(qual === otherChoose){ 
 			status = "tie"	
-			console.log("tie")
+			//console.log("tie")
 		}else if ( qual=== 1 && otherChoose === 2){
 			status = "lose"
 			lose ++
-			console.log("lose")
+			//console.log("lose")
 		}else if( qual ===2 &&otherChoose ===3){
 			status = "lose"
 			lose ++
-			console.log("lose")
+			//console.log("lose")
 
 		}else if( qual ===3 && otherChoose ===1){
 			status = "lose"
 			lose ++
-			console.log("lose")
+			//console.log("lose")
 
 		}else{
 			status = "win"
 			win++
-			console.log("win")
+			//console.log("win")
 
 		}
 
-		round = false;
+		
 		$("#win").html(win)
 		$("#lose").html(lose)
 		start();
@@ -177,7 +240,7 @@
 		
 		var input = $("#input").val().trim()
 		data.ref("dialogue").push({
-			history:playerID + ": " + input
+			history:"player " + playerID + "says: " + input
 		})
 
 		$("#input").val("")
@@ -193,4 +256,3 @@
 	     psconsole.scrollTop(psconsole[0].scrollHeight);
 	
 	})
-

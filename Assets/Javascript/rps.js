@@ -62,15 +62,22 @@
 	// 		})
 //function start, start next round
 	function start(){
+		
 		setTimeout(function(){
-			$("#yourChoice").attr("src", "");
-			$("#OtherChoice").attr("src", "");
-			data.ref("choice").set({
+				if(status === "win"){ 
+					$("#OtherChoice").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(300);
+				}else if(status === "lose"){
+					$("#yourChoice").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(300);
+				}
+
 			
-			})
-			setTimeout(function(){round = false;},1000)
+				data.ref("choice").set({
+				
+				})
+
+				setTimeout(function(){round = false;},1000)
 			
-		},3000)
+		},1000);
 
 	}
 
@@ -110,25 +117,29 @@ function newGame(){
 	data.ref("player/player1").on("value", function(snapshot){
 		if(playerID === 2 && begin === true){
 			alert("Opponent left");
-			begin = false
+			begin = false;
+			round = true;
 			newGame()
 
 		}else if(playerID === 2 && begin != true){
 			alert("New Opponent join, Begin Battle!")
-			newGame()
+			newGame();
+			round = false;
 		}
 	})
 
 		data.ref("player/player2").on("value", function(snapshot){
 		if(playerID === 1 && begin === true){
 			alert("Opponent left");
-			begin = false
+			begin = false;
+			round = true;
 			newGame()
 		}
 
 		else if(playerID === 1 && begin != true){
 			alert("New Opponent join, Begin Battle!")
-			newGame()
+			newGame();
+			round = false;
 		}
 	})
 
@@ -137,6 +148,11 @@ function newGame(){
 	$(".play").on("click", function(){
 
 		if(round === false && playerID != 0){
+			$("#yourChoice").attr("src", "");
+			$("#OtherChoice").attr("src", "");
+			$("#yourChoice").show();
+			$("#OtherChoice").show();
+
 			begin = true;
 			$("#yourChoice").attr("src", $(this).attr("src"))
 			qual = $(this).attr("qual")
@@ -153,12 +169,12 @@ function newGame(){
 	function upload(){
 		
 		if(playerID === 1 ){
-			console.log("Uploading")
+			//console.log("Uploading")
 			data.ref("choice/player1").set({
 			choose: qual
 			})
 		}else{
-			console.log("Uploading")
+			//console.log("Uploading")
 			data.ref("choice/player2").set({
 			choose: qual
 			})
